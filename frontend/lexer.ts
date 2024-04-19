@@ -12,6 +12,10 @@ export enum TokenType {
 	Equals,
 	OpenParen,
 	CloseParen,
+
+    //Signifies Last element of file
+    EOF
+    
 }
 
 
@@ -59,7 +63,7 @@ export function tokenize(sourceCode: string): Token[] {
 		} else if (src[0] == ")") {
 			tokens.push(token(src.shift(), TokenType.CloseParen));
 		} // HANDLE BINARY OPERATORS
-		else if (src[0] == "+" || src[0] == "-" || src[0] == "*" || src[0] == "/") {
+		else if (src[0] == "+" || src[0] == "-" || src[0] == "*" || src[0] == "/" ||src[0]=="%") {
 			tokens.push(token(src.shift(), TokenType.BinaryOperator));
 		} // Handle Conditional & Assignment Tokens
 		else if (src[0] == "=") {
@@ -107,12 +111,12 @@ export function tokenize(sourceCode: string): Token[] {
 			}
 		}
 	}
-
+    tokens.push({type:TokenType.EOF,value:"End Of File"});
 	return tokens;
 }
 
-const source= await Deno.readTextFile('./test.txt');
-for (const token of tokenize(source)){
-    console.log(token);
+// const source= await Deno.readTextFile('./test.txt');
+// for (const token of tokenize(source)){
+//     console.log(token);
     
-}
+// }
