@@ -5,6 +5,7 @@ import {
     BinaryExpr,
     Expr,
     Identifier,
+    NullLiteral,
     NumericLiteral,
     Program,
     Stmt,
@@ -132,7 +133,16 @@ import {
         // User defined values.
         case TokenType.Identifier:
           return { kind: "Identifier", symbol: this.eat().value } as Identifier;
-  
+        
+        case TokenType.Null:
+          this.eat();//advance past null keyword
+          return{kind:"NullLiteral", value:"null"} as NullLiteral;
+        // case TokenType.Let:
+        // case TokenType.BinaryOperator:
+        // case TokenType.Equals:
+        // case TokenType.CloseParen:
+        // case TokenType.EOF:
+        
         // Constants and Numeric Constants
         case TokenType.Number:
           return {
