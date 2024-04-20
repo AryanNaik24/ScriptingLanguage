@@ -1,15 +1,16 @@
 //Interpreter
 
 
-import {RuntimeVal,NumberVal,ValueType,NullVal} from "./values.ts";
-import { BinaryExpr, NodeType,NumericLiteral,Program,Stmt } from "../frontend/ast.ts";
+import {RuntimeVal,NumberVal,ValueType,NullVal, MK_NULL} from "./values.ts";
+import { BinaryExpr, Identifier, NodeType,NumericLiteral,Program,Stmt } from "../frontend/ast.ts";
+import Environment from "./environment.ts";
 
 
-function evaluateProgram(program:Program):RuntimeVal{
-    let lastEvaluated:RuntimeVal={type:"null",value:"null"}as NullVal;
+function evaluateProgram(program:Program,env:Environment):RuntimeVal{
+    let lastEvaluated:RuntimeVal=MK_NULL();
 
     for (const statement of program.body){
-        lastEvaluated = evaluate(statement);
+        lastEvaluated = evaluate(statement,env);
     }
 
     return lastEvaluated;
@@ -40,35 +41,42 @@ function evaluateNumericBinary(lhs:NumberVal,rhs:NumberVal,operator:string):Numb
     return { value: result, type: "number" };
 }
 
-function evaluateBinary(binop:BinaryExpr):RuntimeVal{
-    const leftHandSide = evaluate(binop.left);
-    const rigthHandSide =  evaluate(binop.right);
+function evaluateBinary(binop:BinaryExpr,env:Environment):RuntimeVal{
+    const leftHandSide = evaluate(binop.left,env);
+    const rigthHandSide =  evaluate(binop.right,env);
     if (leftHandSide.type ==="number"&&rigthHandSide.type==="number") {
         return evaluateNumericBinary(leftHandSide as NumberVal,rigthHandSide as NumberVal,binop.operator);
     }
 
-    return {type:"null",value:"null"}as NullVal;
+    return MK_NULL();
+}
+
+
+function evalIdentifier(ident:Identifier,env:Environment):RuntimeVal{
+    const val = env.lookupVar(ident.symbol);
+    return val;
 }
 
 
 //creates a onetime value based on astNode
-export function evaluate (astNode:Stmt):RuntimeVal{
+export function evaluate (astNode:Stmt,env:Environment):RuntimeVal{
     switch (astNode.kind) {
         case "NumericLiteral":
             return{value:(( astNode as NumericLiteral).value),type:"number"}as NumberVal;
         
-        case "NullLiteral":
-            return {value:"null",type:"null"}as NullVal;
+        // case "NullLiteral":
+        //     return MK_NULL();
         
         case "BinaryExpr":
-            return evaluateBinary(astNode as BinaryExpr);
+            return evaluateBinary(astNode as BinaryExpr,env);
 
         case "Program":
-            return evaluateProgram(astNode as Program);
+            return evaluateProgram(astNode as Program,env);
 
 
 
-        //case "Identifier":
+        case "Identifier":
+            return evalIdentifier(astNode as Identifier,env);
     
         default:
             console.error("AST Node not setup for this type of interpretation",astNode);

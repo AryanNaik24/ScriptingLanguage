@@ -2,9 +2,10 @@
 export type NodeType =
   | "Program"
   | "NumericLiteral"
-  | "NullLiteral"
+
   | "Identifier"
   | "BinaryExpr";
+    // | "NullLiteral"
 
 /**
  * Statements do not result in a value at runtime.
@@ -54,7 +55,7 @@ export interface NumericLiteral extends Expr {
   value: number;
 }
 
-export interface NullLiteral extends Expr {
-  kind: "NullLiteral";
-  value: "null";
-}
+// export interface NullLiteral extends Expr {
+//   kind: "NullLiteral";
+//   value: "null";
+// }

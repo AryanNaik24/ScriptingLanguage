@@ -1,11 +1,11 @@
 
 export enum TokenType {
 	//Null value
-	Null,
+	// Null,
 	// Literal Types
 	Number,
 	Identifier,
-
+	String,
 	// Keywords
 	Let,
 
@@ -23,7 +23,7 @@ export enum TokenType {
 
 const KEYWORDS: Record<string, TokenType> = {
 	let: TokenType.Let,
-	null:TokenType.Null,
+
 };
 
 // Reoresents a single token from the source-code.
