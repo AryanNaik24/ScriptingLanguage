@@ -1,11 +1,14 @@
 //ast
 export type NodeType =
+  //statements
   | "Program"
-  | "NumericLiteral"
+  | "VarDeclare"
 
+  //expressions
+  | "NumericLiteral"
   | "Identifier"
   | "BinaryExpr";
-    // | "NullLiteral"
+
 
 /**
  * Statements do not result in a value at runtime.
@@ -21,6 +24,13 @@ export interface Stmt {
 export interface Program extends Stmt {
   kind: "Program";
   body: Stmt[];
+}
+
+export interface VarDeclare extends Stmt {
+  kind: "VarDeclare";
+  constant:boolean ;
+  identifier:string;
+  value?:Expr;
 }
 
 //  Expressions will result in a value at runtime unlike Statements 
@@ -55,7 +65,4 @@ export interface NumericLiteral extends Expr {
   value: number;
 }
 
-// export interface NullLiteral extends Expr {
-//   kind: "NullLiteral";
-//   value: "null";
-// }
+

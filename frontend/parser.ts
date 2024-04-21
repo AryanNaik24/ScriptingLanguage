@@ -5,12 +5,12 @@ import {
     BinaryExpr,
     Expr,
     Identifier,
-
     NumericLiteral,
     Program,
     Stmt,
+    VarDeclare,
   } from "./ast.ts";
-      // NullLiteral, removed
+
   
   import { Token, tokenize, TokenType } from "./lexer.ts";
   
@@ -74,7 +74,34 @@ import {
     // Handle complex statement types
     private parse_stmt(): Stmt {
       // skip to parse_expr
-      return this.parse_expr();
+      switch(this.at().type){
+
+        case TokenType.Let:
+        case TokenType.Const:
+          return  this.parse_var_declaration();
+
+        default:
+          return this.parse_expr();
+      }
+    }
+
+    //let ident;
+    //(const/let) ident = expr;
+    parse_var_declaration():Stmt{
+      const isConstant = this.eat().type===TokenType.Const;
+      const identifier = this.expect(TokenType.Identifier,"Expected identifier name following let | const keywords").value;
+
+      if(this.at().type===TokenType.Semicolon){
+        this.eat();
+        if(isConstant){
+          throw "Must assign value to constant type.No value provided!";
+        }
+        return {kind:"VarDeclare",identifier,constant:false}as VarDeclare;
+      }
+      this.expect(TokenType.Equals,"Expected equals token following identifier in var declaration.");
+      const declaration={kind:"VarDeclare",value:this.parse_expr(),identifier,constant:isConstant}as VarDeclare;
+      this.expect(TokenType.Semicolon,"Expected Semicolon at the end of Variable declaration.");
+      return declaration;
     }
   
     // Handle expressions
@@ -135,9 +162,7 @@ import {
         case TokenType.Identifier:
           return { kind: "Identifier", symbol: this.eat().value } as Identifier;
         
-        // case TokenType.Null:
-        //   this.eat();//advance past null keyword
-        //   return{kind:"NullLiteral", value:"null"} as NullLiteral;
+
         // case TokenType.Let:
         // case TokenType.BinaryOperator:
         // case TokenType.Equals:

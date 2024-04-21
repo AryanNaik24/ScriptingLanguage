@@ -1,17 +1,18 @@
 
 export enum TokenType {
-	//Null value
-	// Null,
+
 	// Literal Types
 	Number,
 	Identifier,
 	String,
 	// Keywords
 	Let,
+	Const,
 
 	// Grouping * Operators
 	BinaryOperator,
 	Equals,
+	Semicolon,
 	OpenParen,
 	CloseParen,
 
@@ -23,6 +24,7 @@ export enum TokenType {
 
 const KEYWORDS: Record<string, TokenType> = {
 	let: TokenType.Let,
+	const: TokenType.Const,
 
 };
 
@@ -71,7 +73,10 @@ export function tokenize(sourceCode: string): Token[] {
 		} // Handle Conditional & Assignment Tokens
 		else if (src[0] == "=") {
 			tokens.push(token(src.shift(), TokenType.Equals));
-		} // HANDLE MULTICHARACTER KEYWORDS, TOKENS, IDENTIFIERS ETC...
+		} //Handles semicolons
+		else if (src[0] == ";") {
+			tokens.push(token(src.shift(), TokenType.Semicolon));
+		}// HANDLE MULTICHARACTER KEYWORDS, TOKENS, IDENTIFIERS ETC...
 		else {
 			// Handle numeric literals -> Integers
 			if (isint(src[0])) {
@@ -118,8 +123,3 @@ export function tokenize(sourceCode: string): Token[] {
 	return tokens;
 }
 
-// const source= await Deno.readTextFile('./test.txt');
-// for (const token of tokenize(source)){
-//     console.log(token);
-    
-// }
