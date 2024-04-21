@@ -2,9 +2,9 @@
 
 
 import {RuntimeVal,NumberVal} from "./values.ts";
-import { BinaryExpr, Identifier, NumericLiteral,Program,Stmt, VarDeclare } from "../frontend/ast.ts";
+import { AssignmentExpr, BinaryExpr, Identifier, NumericLiteral,Program,Stmt, VarDeclare } from "../frontend/ast.ts";
 import Environment from "./environment.ts";
-import { evaluateBinary, evalIdentifier } from "./evaluation/expressions.ts";
+import { evaluateBinary, evalIdentifier,evalAssignment } from "./evaluation/expressions.ts";
 import { evaluateProgram, evalVarDeclare } from "./evaluation/statements.ts";
 
 
@@ -29,6 +29,11 @@ export function evaluate (astNode:Stmt,env:Environment):RuntimeVal{
         case "Identifier":
             return evalIdentifier(astNode as Identifier,env);
         
+        case "AssignmentExpr":
+            return evalAssignment(astNode as AssignmentExpr,env);
+          
+
+
         case "VarDeclare":
           return evalVarDeclare(astNode as VarDeclare,env);
     

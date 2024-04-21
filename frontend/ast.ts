@@ -5,6 +5,7 @@ export type NodeType =
   | "VarDeclare"
 
   //expressions
+  | "AssignmentExpr"
   | "NumericLiteral"
   | "Identifier"
   | "BinaryExpr";
@@ -35,6 +36,14 @@ export interface VarDeclare extends Stmt {
 
 //  Expressions will result in a value at runtime unlike Statements 
 export interface Expr extends Stmt {}
+
+//let x = { foo : bar  };
+
+export interface AssignmentExpr extends Expr{
+  kind:"AssignmentExpr";
+  assigne:Expr;
+  value:Expr;
+}
 
 /**
  * A operation with two sides seperated by a operator.
