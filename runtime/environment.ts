@@ -3,7 +3,7 @@
 //Environment and variable storage
 
 
-import { MK_BOOL, MK_NULL, RuntimeVal } from "./values.ts";
+import { MK_BOOL, MK_NATIVE_FUNCTION, MK_NULL, MK_NUMBER, RuntimeVal } from "./values.ts";
 
 export function createGlobalEnv() {
   const env = new Environment();
@@ -12,6 +12,17 @@ export function createGlobalEnv() {
   env.declareVar("false", MK_BOOL(false), true);
   env.declareVar("null", MK_NULL(), true);
 
+    //define a native builtin method
+
+    env.declareVar("show",MK_NATIVE_FUNCTION((args,scope)=>{
+        console.log(...args);
+        
+        return MK_NULL();
+    }),true)
+    function timeFunction(args:RuntimeVal[],env:Environment){
+        return MK_NUMBER(Date.now());
+    }
+    env.declareVar("clock",MK_NATIVE_FUNCTION(timeFunction),true);
   return env;
 }
 

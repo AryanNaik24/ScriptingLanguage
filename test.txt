@@ -1,12 +1,6 @@
 let foo = 45/2;
 
-const obj = {
-    x:100,
-    y:23,
-    foo,
-    complex : {
-        bar:true,
-    },
-};
-foo = obj.foo()+5
-let f = object.complex.bar;
+show(foo,45)
+
+const tn = clock();
+show (tn)
