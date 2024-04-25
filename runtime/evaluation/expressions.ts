@@ -1,7 +1,7 @@
-import { AssignmentExpr, BinaryExpr, Identifier } from "../../frontend/ast.ts";
+import { AssignmentExpr, BinaryExpr, Identifier, ObjectLiteral } from "../../frontend/ast.ts";
 import Environment from "../environment.ts";
 import { evaluate } from "../interpreter.ts";
-import { NumberVal, RuntimeVal, MK_NULL } from "../values.ts";
+import { NumberVal, RuntimeVal, MK_NULL, ObjectVal } from "../values.ts";
 
 export function evaluateNumericBinary(lhs:NumberVal,rhs:NumberVal,operator:string):NumberVal{
     let result: number;
@@ -51,4 +51,20 @@ export function evalAssignment(node:AssignmentExpr,env:Environment):RuntimeVal{
 
     const varname = (node.assigne as Identifier).symbol;
     return env.assignVar(varname,evaluate(node.value,env))
+}
+
+
+export function evalObject(obj:ObjectLiteral,env:Environment):RuntimeVal{
+    
+    const object = {type:"object",properties: new Map() }as ObjectVal;
+    for(const {key,value} of obj.properties ){
+
+
+        //handles valid key pair
+        const runtimeVal = (value === undefined)?env.lookupVar(key):evaluate(value,env);
+
+        object.properties.set(key,runtimeVal);
+
+    }
+    return object;
 }
