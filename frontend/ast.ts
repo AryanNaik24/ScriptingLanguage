@@ -1,19 +1,18 @@
-//ast
+
 export type NodeType =
-  //statements
+  // STATEMENTS
   | "Program"
-  | "VarDeclare"
-
-  //expressions
+  | "VarDeclaration"
+  // EXPRESSIONS
   | "AssignmentExpr"
-
-  //literals
+  | "MemberExpr"
+  | "CallExpr"
+  // Literals
   | "Property"
   | "ObjectLiteral"
   | "NumericLiteral"
   | "Identifier"
   | "BinaryExpr";
-
 
 /**
  * Statements do not result in a value at runtime.
@@ -31,22 +30,20 @@ export interface Program extends Stmt {
   body: Stmt[];
 }
 
-export interface VarDeclare extends Stmt {
-  kind: "VarDeclare";
-  constant:boolean ;
-  identifier:string;
-  value?:Expr;
+export interface VarDeclaration extends Stmt {
+  kind: "VarDeclaration";
+  constant: boolean;
+  identifier: string;
+  value?: Expr;
 }
 
-//  Expressions will result in a value at runtime unlike Statements 
+/**  Expressions will result in a value at runtime unlike Statements */
 export interface Expr extends Stmt {}
 
-//let x = { foo : bar  };
-
-export interface AssignmentExpr extends Expr{
-  kind:"AssignmentExpr";
-  assigne:Expr;
-  value:Expr;
+export interface AssignmentExpr extends Expr {
+  kind: "AssignmentExpr";
+  assigne: Expr;
+  value: Expr;
 }
 
 /**
@@ -61,18 +58,31 @@ export interface BinaryExpr extends Expr {
   operator: string; // needs to be of type BinaryOperator
 }
 
+export interface CallExpr extends Expr {
+  kind: "CallExpr";
+  args: Expr[];
+  caller: Expr;
+}
+
+export interface MemberExpr extends Expr {
+  kind: "MemberExpr";
+  object: Expr;
+  property: Expr;
+  computed: boolean;
+}
+
 // LITERAL / PRIMARY EXPRESSION TYPES
-
- // Represents a user-defined variable or symbol in source.
-
+/**
+ * Represents a user-defined variable or symbol in source.
+ */
 export interface Identifier extends Expr {
   kind: "Identifier";
   symbol: string;
 }
 
-
- //Represents a numeric constant inside the soure code.
- 
+/**
+ * Represents a numeric constant inside the soure code.
+ */
 export interface NumericLiteral extends Expr {
   kind: "NumericLiteral";
   value: number;
@@ -88,4 +98,3 @@ export interface ObjectLiteral extends Expr {
   kind: "ObjectLiteral";
   properties: Property[];
 }
-
