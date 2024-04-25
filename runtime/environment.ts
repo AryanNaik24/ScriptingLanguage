@@ -1,3 +1,4 @@
+// deno-lint-ignore-file
 
 
 //Environment and variable storage

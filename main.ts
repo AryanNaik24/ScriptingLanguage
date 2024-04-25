@@ -1,3 +1,4 @@
+// deno-lint-ignore-file
 //any function
 
 import Parser from "./frontend/parser.ts";

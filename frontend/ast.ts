@@ -3,6 +3,7 @@ export type NodeType =
   // STATEMENTS
   | "Program"
   | "VarDeclaration"
+  | "FunctionDeclaration"
   // EXPRESSIONS
   | "AssignmentExpr"
   | "MemberExpr"
@@ -36,6 +37,14 @@ export interface VarDeclaration extends Stmt {
   identifier: string;
   value?: Expr;
 }
+
+export interface FunctionDeclaration extends Stmt {
+  kind: "FunctionDeclaration";
+  parameters:string[];
+  name:string;
+  body:Stmt[];
+}
+
 
 /**  Expressions will result in a value at runtime unlike Statements */
 export interface Expr extends Stmt {}

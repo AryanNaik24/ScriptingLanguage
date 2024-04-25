@@ -1,6 +1,10 @@
-let foo = 45/2;
 
-show(foo,45)
+fn makeAdder(offset){
+  fn add (x,y){
+    x+y+offset
+}}
 
-const tn = clock();
-show (tn)
+  
+const adder = makeAdder(1);
+show(adder(10,4))
+
