@@ -28,8 +28,8 @@ export enum TokenType {
    * Constant lookup for keywords and known identifiers + symbols.
    */
   const KEYWORDS: Record<string, TokenType> = {
-	let: TokenType.Let,
-	const: TokenType.Const,
+	lt: TokenType.Let,
+	ct: TokenType.Const,
 	fn:TokenType.Fn,
   };
   
